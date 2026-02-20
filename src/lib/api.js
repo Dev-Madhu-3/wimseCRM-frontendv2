@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 const api = axios.create({
   baseURL: "https://wimsecrm-backendv2-1.onrender.com/api",
   // baseURL: "http://localhost:5000/api",
+  // baseURL: "https://verbose-winner-x556qxv96gvpf97w7-5000.app.github.dev/api",
 });
 
 api.interceptors.request.use(

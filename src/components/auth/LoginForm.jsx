@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/useAuth";
+import { useAuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
@@ -12,7 +12,7 @@ const LoginForm = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAuthContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

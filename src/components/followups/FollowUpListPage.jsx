@@ -12,6 +12,7 @@ const FollowUpListPage = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const [filterEmployee, setFilterEmployee] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
   const [expandedCards, setExpandedCards] = useState(new Set());
 
   useEffect(() => {
@@ -35,15 +36,17 @@ const FollowUpListPage = () => {
 
     // Apply search filter
     if (searchQuery) {
-      result = result.filter(
-        (followUp) =>
-          followUp.lead.name
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          followUp.lead.mobile.includes(searchQuery) ||
-          followUp.feedback.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          followUp.followedBy.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      const q = searchQuery.toLowerCase();
+      result = result.filter((followUp) => {
+        const leadName = followUp.lead?.name || "";
+        const leadMobile = followUp.lead?.mobile || "";
+        return (
+          leadName.toLowerCase().includes(q) ||
+          leadMobile.includes(q) ||
+          (followUp.feedback || "").toLowerCase().includes(q) ||
+          (followUp.followedBy || "").toLowerCase().includes(q)
+        );
+      });
     }
 
     // Apply status filter
@@ -58,8 +61,37 @@ const FollowUpListPage = () => {
       );
     }
 
+    // Sorting
+    const sortFn = (a, b) => {
+      switch (sortBy) {
+        case "oldest":
+          return new Date(a.date) - new Date(b.date);
+        case "nextSoon": {
+          const ad = a.nextFollowUpDate ? new Date(a.nextFollowUpDate) : null;
+          const bd = b.nextFollowUpDate ? new Date(b.nextFollowUpDate) : null;
+          if (!ad && !bd) return 0;
+          if (!ad) return 1;
+          if (!bd) return -1;
+          return ad - bd;
+        }
+        case "nextLatest": {
+          const ad = a.nextFollowUpDate ? new Date(a.nextFollowUpDate) : null;
+          const bd = b.nextFollowUpDate ? new Date(b.nextFollowUpDate) : null;
+          if (!ad && !bd) return 0;
+          if (!ad) return 1;
+          if (!bd) return -1;
+          return bd - ad;
+        }
+        case "newest":
+        default:
+          return new Date(b.date) - new Date(a.date);
+      }
+    };
+
+    result = [...result].sort(sortFn);
+
     setFilteredFollowUps(result);
-  }, [followUps, searchQuery, filterStatus, filterEmployee]);
+  }, [followUps, searchQuery, filterStatus, filterEmployee, sortBy]);
 
   const handleToggleCard = (id) => {
     const newExpanded = new Set(expandedCards);
@@ -103,6 +135,19 @@ const FollowUpListPage = () => {
     >
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Follow-ups</h1>
+        <div className="mt-3 sm:mt-0 flex items-center space-x-2">
+          <label className="text-sm text-gray-600">Sort:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="block text-sm border border-gray-300 rounded-md shadow-sm py-1 px-2 bg-white"
+          >
+            <option value="newest">Date: Newest first</option>
+            <option value="oldest">Date: Oldest first</option>
+            <option value="nextSoon">Next follow-up: Soonest</option>
+            <option value="nextLatest">Next follow-up: Latest</option>
+          </select>
+        </div>
       </div>
 
       {/* Search and Filters */}

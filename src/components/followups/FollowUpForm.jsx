@@ -15,6 +15,7 @@ const FollowUpForm = ({
   onFollowUpUpdated,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [employees, setEmployees] = useState([]);
   const [statuses] = useState([
     "Next Follow-up",
     "Visit Office",
@@ -58,6 +59,23 @@ const FollowUpForm = ({
       setValue("nextFollowUpTime", "");
     }
   }, [watchedStatus, setValue]);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await api.get("/settings/employees");
+        setEmployees(response.data || []);
+        // If editing and followedBy exists, ensure the form value matches
+        if (followUp && followUp.followedBy) {
+          setValue("followedBy", followUp.followedBy);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch employees");
+      }
+    };
+
+    fetchEmployees();
+  }, [followUp, setValue]);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -186,16 +204,20 @@ const FollowUpForm = ({
           >
             Followed By
           </label>
-          <input
-            type="text"
+          <select
             id="followedBy"
             {...register("followedBy", { required: "Followed by is required" })}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-          />
+          >
+            <option value="">Select employee</option>
+            {employees.map((emp) => (
+              <option key={emp.id} value={emp.name}>
+                {emp.name}
+              </option>
+            ))}
+          </select>
           {errors.followedBy && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.followedBy.message}
-            </p>
+            <p className="mt-1 text-sm text-red-600">{errors.followedBy.message}</p>
           )}
         </div>
 

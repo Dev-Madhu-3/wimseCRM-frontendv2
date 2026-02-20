@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
@@ -12,7 +12,7 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login, user } = useAuth();
+  const { login, user } = useAuthContext();
   const navigate = useNavigate();
 
   // useEffect(() => {

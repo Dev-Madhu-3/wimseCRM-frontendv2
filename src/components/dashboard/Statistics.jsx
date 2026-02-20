@@ -72,6 +72,10 @@ const Statistics = () => {
     }
   };
 
+  const calcHeight = (count, base = 300, per = 40) => {
+    return Math.max(base, count * per);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -153,17 +157,37 @@ const Statistics = () => {
           <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
             Employee-wise Performance
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={employeePerformance}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="leadsCount" fill="#3b82f6" name="Leads" />
-              <Bar dataKey="followUpsCount" fill="#10b981" name="Follow-ups" />
-            </BarChart>
-          </ResponsiveContainer>
+          {(() => {
+            const count = employeePerformance.length;
+            const isVertical = count > 8; // switch to vertical bars when many employees
+            const height = calcHeight(count, 300, 36);
+
+            return (
+              <ResponsiveContainer width="100%" height={height}>
+                {isVertical ? (
+                  <BarChart data={employeePerformance} layout="vertical" margin={{ left: 80 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis type="category" dataKey="name" width={150} />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="leadsCount" fill="#3b82f6" name="Leads" barSize={18} />
+                    <Bar dataKey="followUpsCount" fill="#10b981" name="Follow-ups" barSize={18} />
+                  </BarChart>
+                ) : (
+                  <BarChart data={employeePerformance} barSize={24}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" interval={0} />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="leadsCount" fill="#3b82f6" name="Leads" />
+                    <Bar dataKey="followUpsCount" fill="#10b981" name="Follow-ups" />
+                  </BarChart>
+                )}
+              </ResponsiveContainer>
+            );
+          })()}
         </div>
 
         {/* Source-wise Performance */}
@@ -171,17 +195,24 @@ const Statistics = () => {
           <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
             Source-wise Performance
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={sourcePerformance}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="source" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="leads" fill="#3b82f6" name="Leads" />
-              <Bar dataKey="converted" fill="#10b981" name="Converted" />
-            </BarChart>
-          </ResponsiveContainer>
+          {(() => {
+            const count = sourcePerformance.length;
+            const height = calcHeight(count, 300, 36);
+
+            return (
+              <ResponsiveContainer width="100%" height={height}>
+                <BarChart data={sourcePerformance} barCategoryGap="20%">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="source" interval={0} tick={{ angle: -45, textAnchor: 'end' }} height={60} />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="leads" fill="#3b82f6" name="Leads" />
+                  <Bar dataKey="converted" fill="#10b981" name="Converted" />
+                </BarChart>
+              </ResponsiveContainer>
+            );
+          })()}
         </div>
 
         {/* Branch-wise Performance */}
@@ -189,17 +220,24 @@ const Statistics = () => {
           <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
             Branch-wise Performance
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={branchPerformance}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="branch" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="leads" fill="#3b82f6" name="Leads" />
-              <Bar dataKey="converted" fill="#10b981" name="Converted" />
-            </BarChart>
-          </ResponsiveContainer>
+          {(() => {
+            const count = branchPerformance.length;
+            const height = calcHeight(count, 300, 36);
+
+            return (
+              <ResponsiveContainer width="100%" height={height}>
+                <BarChart data={branchPerformance} barCategoryGap="20%">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="branch" interval={0} tick={{ angle: -30, textAnchor: 'end' }} height={50} />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="leads" fill="#3b82f6" name="Leads" />
+                  <Bar dataKey="converted" fill="#10b981" name="Converted" />
+                </BarChart>
+              </ResponsiveContainer>
+            );
+          })()}
         </div>
       </div>
     </motion.div>

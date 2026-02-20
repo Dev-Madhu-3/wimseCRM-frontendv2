@@ -30,7 +30,7 @@ export const useAuth = () => {
     const response = await api.post("/auth/login", credentials);
 
     Cookies.set("token", response.data.token);
-    checkAuth();
+    await checkAuth();
     // setUser(response.data.user);
 
     return response.data;

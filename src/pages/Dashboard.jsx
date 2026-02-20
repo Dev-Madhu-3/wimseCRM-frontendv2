@@ -3,10 +3,10 @@ import Home from "../components/dashboard/Home";
 import { Navigate } from "react-router-dom";
 import Dashboard from "../components/dashboard/Dashboard";
 import Statistics from "../components/dashboard/Statistics";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../context/AuthContext";
 
 const DashboardPage = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   return (
     <>

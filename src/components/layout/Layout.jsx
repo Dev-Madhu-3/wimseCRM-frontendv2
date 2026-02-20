@@ -9,7 +9,7 @@ import Statistics from "../dashboard/Statistics";
 import LeadList from "../leads/LeadList";
 import LeadDetail from "../leads/LeadDetail";
 import LeadForm from "../leads/LeadForm";
-import FollowUpList from "../followups/FollowUpList";
+import FollowUpListPage from "../followups/FollowUpListPage";
 import BranchSettings from "../settings/BranchSettings";
 import CourseSettings from "../settings/CourseSettings";
 import EmployeeSettings from "../settings/EmployeeSettings";
@@ -38,7 +38,8 @@ const Layout = () => {
                   <Route path="/leads" element={<LeadList />} />
                   <Route path="/leads/new" element={<LeadForm />} />
                   <Route path="/leads/:id" element={<LeadDetail />} />
-                  <Route path="/followups" element={<FollowUpList />} />
+                  <Route path="/leads/:id/edit" element={<LeadForm />} />
+                  <Route path="/followups" element={<FollowUpListPage />} />
                   <Route
                     path="/settings/branches"
                     element={<BranchSettings />}

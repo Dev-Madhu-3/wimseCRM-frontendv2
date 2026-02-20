@@ -327,7 +327,7 @@ const LeadDetail = () => {
                   />
                 </div>
               )}
-              <FollowUpList followUps={lead.followUps || []} />
+              <FollowUpList followUps={lead.followUps || []} lead={lead} onFollowUpUpdated={(f) => { /* noop */ }} />
             </div>
           </div>
         </div>
