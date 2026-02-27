@@ -4,7 +4,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { Search, Bell, LogOut, Menu } from "lucide-react";
 import { AiOutlineLogout } from "react-icons/ai";
 
-const Header = ({ sidebarOpen, setSidebarOpen }) => {
+const Header = () => {
   const { user, logout } = useAuthContext();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <button
+            {/* <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
             >
               <Menu className="h-6 w-6" />
-            </button>
+            </button> */}
             <form
               onSubmit={handleSearch}
               className="ml-4 md:ml-6 flex-1 max-w-lg"

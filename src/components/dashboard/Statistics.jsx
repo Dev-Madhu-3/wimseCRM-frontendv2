@@ -168,7 +168,7 @@ const Statistics = () => {
                   <BarChart data={employeePerformance} layout="vertical" margin={{ left: 80 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
-                    <YAxis type="category" dataKey="name" width={150} />
+                    <YAxis type="category" dataKey="name" width={150} tick={false} axisLine={false} tickLine={false} />
                     <Tooltip />
                     <Legend />
                     <Bar dataKey="leadsCount" fill="#3b82f6" name="Leads" barSize={18} />
@@ -177,7 +177,7 @@ const Statistics = () => {
                 ) : (
                   <BarChart data={employeePerformance} barSize={24}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" interval={0} />
+                    <XAxis dataKey="name" interval={0} tick={false} axisLine={false} tickLine={false} />
                     <YAxis />
                     <Tooltip />
                     <Legend />
